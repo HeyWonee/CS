@@ -124,6 +124,9 @@ execlp('프로그램이름', '프로그램이름', args... , (chart *) 0 );
 ![image-20221130160716607](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221130160716607.png)
 
 - 프로세스 사이에 공유 변수(shared variable)를 일체 사용하지 않고 통신하는 시스템
+- System call을 사용하여 구현되며, Kernel을 통해 send(message)와 receive(message)라는 두가지 연산을 제공 받음
+- 공유메모리 대비 속도는 느리지만 충돌을 회피할 필요가 없기 때문에 적은양의 데이터를 교환하는데 유용햠
+- Socket, pipe, message queue등이 있음.
 - Direct communication
   - 통신하려는 프로세스의 이름을 명시적으로 표시
 
@@ -134,3 +137,32 @@ execlp('프로그램이름', '프로그램이름', args... , (chart *) 0 );
 
 ![image-20221130160644950](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221130160644950.png)
 
+
+
+## Shared Memory
+
+- Process 들이 주소 공간을 공유 함. process가 메모리 할당을 kernel에 요청하면 kernel은 해당 process에 메모리 공간을 할당해줌.
+- 공유메모리 영역이 구축 된 후 kernel의 도움 없이 각 process 끼리 데이터 통신이 가능하기 때문에 IPC 속도가 빠름
+- 단, 동시에 같은 메모리 위치에 접근하게 되면 일관성 문제가 발생할 수 있음.
+  - Mutex : 1개의 스레드만이 공유 자원에 접근할 수 있도록 하여 경쟁 상황(race condition) 방지 하는 기법
+    - 공유 자원을 점유하는 thread가 lock을 걸면 다른 thread는 unlock 상태가 될때까지 접근할 수 없음
+  - Semaphore : S개의 therad가 접근할 수 있도록 제어하는 방식
+    - 정수형 변수 S(Semaphore)값을 가용가능한 자원의 수로 초기화하고 접근할 때는 `S--` , 방출할 때는 `S++` 연산 수행하여 값을 증가 시킴
+    - S가 1인 것은 Mutex와 동일하게 작동
+
+
+
+## 교착상태(Deadlock)
+
+- 둘 이상의 thread가 각기 다른 thread가 점유하고 있는 자원을 서로 기다릴 때, 무한 대기에 빠지는 현상
+
+- deadlock 발생 가능 조건 (아래 4가지가 모두 성립될 때 발생 `가능`)
+
+  - 상호 배제(mutual exclusion) : 동시에 한 thread만 자원을 점유할 수 있음
+  - 점유 대기(hold-and-wait) : thread가 자원을 보유한 상황에서 다른 thread가 보유한 자원을 추가로 기다리는 상황
+  - 비선점(non-preemption) : 다른 thread가 사용 중인 자원을 강제로 선점할 수 없는 상황으로 자원을 점유하는 thread에 의해서만 자원이 방출됨
+  - 순환 대기(circular wait) : 대기 중인 thread들이 순환 형태로 자원을 대기하고 있는 상황 
+
+- deadlock 회피
+
+  ![image-20221201021339366](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221201021339366.png)
