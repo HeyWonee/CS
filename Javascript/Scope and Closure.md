@@ -48,3 +48,26 @@
     - 함수 호출 => 실행 컨텍스트 생성 => 실행 컨텍스트 스택에 push + 렉시컬 환경 생성 => 실행 컨텍스트 스택에 해당 함수를 pop하여 제거
     - 렉시컬 환경 : 어떠한 코드가 어디서 실행이 되고 어떤 코드들이 있는지에 대한 정보를 담고 있는 환경
       - 하나의 자료구조로, 포함하는 식별자, 식별자에 바인딩 된 값, 상위 렉시컬 환경에 대한 참조	
+
+
+
+# 클로져
+
+- 중첩함수가 상위 스코프의 식별자를 참조하고 있고, 본인의 외부 함수보다 더 오래 살아있는 것
+- Closure가 참조하고 있는 변수를 자유변수라고 함.
+
+
+
+![image-20221205203723762](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221205203723762.png)
+
+
+
+- 위의 코드에서 중첩함수 Inner가 이미 생명 주기를 마감한 외부함수의 지역변수(x=10)를 참조 할 수 있다면 이때의 Inner함수를 Closure라고 함.
+
+![image-20221205203824420](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221205203824420.png)
+
+- outer함수가 호출되고 ella에 Inner함수가 할당됨
+
+![image-20221205204127348](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20221205204127348.png)
+
+- 이때 outer함수가 생명주기를 다 했다고 해서 outer함수의 렉시컬 환경 또한 소멸되지 않음
